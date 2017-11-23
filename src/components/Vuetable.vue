@@ -55,7 +55,7 @@
           <template v-for="field in tableFields">
             <template v-if="field.visible">
               <template>
-                <col 
+                <col
                   :id="'_col_' + field.name"
                   :style="{width: field.width}"
                   :class="['vuetable-th-'+field.name, field.titleClass]"
@@ -67,7 +67,7 @@
     <tbody v-cloak class="vuetable-body">
       <template v-for="(item, index) in tableData">
         <tr @dblclick="onRowDoubleClicked(item, $event)" :item-index="index" @click="onRowClicked(item, $event)" :render="onRowChanged(item)" :class="onRowClass(item, index)">
-          <template v-for="field in tableFields">
+          <template v-for="(field, fieldIndex) in tableFields">
             <template v-if="field.visible">
               <template v-if="isSpecialField(field.name)">
                 <td v-if="extractName(field.name) == '__sequence'" :class="['vuetable-sequence', field.dataClass]"
@@ -83,7 +83,7 @@
                 </td>
                 <td v-if="extractName(field.name) === '__component'" :class="['vuetable-component', field.dataClass]">
                   <component :is="extractArgs(field.name)"
-                    :row-data="item" :row-index="index" :row-field="field.sortField" :field="field"
+                    :row-data="item" :row-index="index" :row-field="field.sortField" :field="fields[fieldIndex]"
                   ></component>
                 </td>
                 <td v-if="extractName(field.name) === '__slot'" :class="['vuetable-slot', field.dataClass]">
@@ -134,7 +134,7 @@
   </div>
 </div>
 <table v-else :class="['vuetable', css.tableClass]"> <!-- no fixed header - regular table -->
-  <thead> 
+  <thead>
     <tr>
       <template v-for="field in tableFields">
         <template v-if="field.visible">
@@ -181,7 +181,7 @@
   <tbody v-cloak class="vuetable-body">
     <template v-for="(item, index) in tableData">
       <tr @dblclick="onRowDoubleClicked(item, $event)" :item-index="index" @click="onRowClicked(item, $event)" :render="onRowChanged(item)" :class="onRowClass(item, index)">
-        <template v-for="field in tableFields">
+        <template v-for="(field, fieldIndex) in tableFields">
           <template v-if="field.visible">
             <template v-if="isSpecialField(field.name)">
               <td v-if="extractName(field.name) == '__sequence'" :class="['vuetable-sequence', field.dataClass]"
@@ -197,7 +197,7 @@
               </td>
               <td v-if="extractName(field.name) === '__component'" :class="['vuetable-component', field.dataClass]">
                 <component :is="extractArgs(field.name)"
-                  :row-data="item" :row-index="index" :row-field="field.sortField" :field="field"
+                  :row-data="item" :row-index="index" :row-field="field.sortField" :field="fields[fieldIndex]"
                 ></component>
               </td>
               <td v-if="extractName(field.name) === '__slot'" :class="['vuetable-slot', field.dataClass]">
@@ -554,7 +554,7 @@ export default {
         }
         this.lastScrollPosition = horizontal;
       }
-      
+
     },
     normalizeFields () {
       if (typeof(this.fields) === 'undefined') {
@@ -693,7 +693,7 @@ export default {
           + 'You can explicitly suppress this warning by setting pagination-path="".'
         )
       }
-      
+
       this.$nextTick(function() {
         this.fixHeader()
         this.fireEvent('pagination-data', this.tablePagination)
@@ -704,7 +704,7 @@ export default {
       if (!this.isFixedHeader) {
         return;
       }
-      
+
       let elem = this.$el.getElementsByClassName('vuetable-body-wrapper')[0]
       if (elem != null) {
         if (elem.scrollHeight > elem.clientHeight) {
